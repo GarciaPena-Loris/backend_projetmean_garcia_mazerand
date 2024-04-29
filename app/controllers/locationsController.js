@@ -2,90 +2,134 @@ const locationsService = require('../services/locationsService');
 
 class LocationsController {
 
-    async handleAsync(fn) {
-        return async (req, res, next) => {
-            try {
-                await fn(req, res, next);
-            } catch (error) {
-                console.error('Controller Error:', error.message);
-                res.status(500).json({ error: 'Internal Server Error:' + error.message });
-            }
-        };
-    }
-
     async getLocations(req, res) {
         console.info('Controller: getLocations');
-        const locations = await locationsService.getLocations();
-        res.status(200).json(locations);
+        try {
+            const locations = await locationsService.getLocations();
+            res.status(200).json(locations);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async getLocationByBienId(req, res) {
-        console.info('Controller: getLocationByBienId', req.params.bienId);
-        const bienId = req.params.bienId;
-        const location = await locationsService.getLocationByBienId(bienId);
-        res.status(200).json(location);
+        console.info('Controller: getLocationByBienId');
+        try {
+            const bienId = req.params.bienId;
+            const location = await locationsService.getLocationByBienId(bienId);
+            res.status(200).json(location);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async createLocation(req, res) {
-        console.info('Controller: createLocation', req.body.location);
-        const location = req.body.location;
-        const createdLocation = await locationsService.createLocation(location);
-        res.status(201).json(createdLocation);
+        console.info('Controller: createLocation');
+        try {
+            const location = req.body.location;
+            const createdLocation = await locationsService.createLocation(location);
+            res.status(201).json(createdLocation);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async updateLocation(req, res) {
-        console.info('Controller: updateLocation', req.body.location);
-        const location = req.body.location;
-        const updatedLocation = await locationsService.updateLocation(location);
-        res.status(200).json(updatedLocation);
+        console.info('Controller: updateLocation');
+        try {
+            const location = req.body.location;
+            const updatedLocation = await locationsService.updateLocation(location);
+            res.status(200).json(updatedLocation);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async deleteLocation(req, res) {
-        console.info('Controller: deleteLocation', req.params.locationId);
-        const locationId = req.params.locationId;
-        await locationsService.deleteLocation(locationId);
-        res.status(204).send();
+        console.info('Controller: deleteLocation');
+        try {
+            const locationId = req.params.locationId;
+            await locationsService.deleteLocation(locationId);
+            res.status(204).send();
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async createFakeReservations(req, res) {
         console.info('Controller: createFakeReservations');
-        await locationsService.createFakeReservations();
-        res.status(204).send();
+        try {
+            await locationsService.createFakeReservations();
+            res.status(204).send();
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async showFakeReservations(req, res) {
         console.info('Controller: showFakeReservations');
-        const reservations = await locationsService.showFakeReservations();
-        res.status(200).json(reservations);
-    }
-
-    async getReservationsByBienId(req, res) {
-        console.info('Controller: getReservationsByBienId', req.params.bienId);
-        const bienId = req.params.bienId;
-        const reservations = await locationsService.getReservationsByBienId(bienId);
-        res.status(200).json(reservations);
+        try {
+            const reservations = await locationsService.showFakeReservations();
+            res.status(200).json(reservations);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async newLocation(req, res) {
-        console.info('Controller: newLocation', req.body.location);
-        const location = req.body.location;
-        const createdLocation = await locationsService.newLocation(location);
-        res.status(201).json(createdLocation);
+        console.info('Controller: newLocation');
+        try {
+            const location = req.body.location;
+            const createdLocation = await locationsService.newLocation(location);
+            res.status(201).json(createdLocation);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
+    }
+
+    async getReservationsByBienId(req, res) {
+        console.info('Controller: getReservationsByBienId');
+        try {
+            const bienId = req.params.bienId;
+            const reservations = await locationsService.getReservationsByBienId(bienId);
+            res.status(200).json(reservations);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async getLocationsByUserEmail(req, res) {
-        console.info('Controller: getLocationsByUserEmail', req.params.email);
-        const userEmail = req.params.email;
-        const locations = await locationsService.getLocationsByUserEmail(userEmail);
-        res.status(200).json(locations);
+        console.info('Controller: getLocationsByUserEmail');
+        try {
+            const userEmail = req.params.email;
+            const locations = await locationsService.getLocationsByUserEmail(userEmail);
+            res.status(200).json(locations);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 
     async addReviewToLocation(req, res) {
-        console.info('Controller: addReviewToLocation', req.params.id, req.body.review);
-        const locationId = req.params.id;
-        const review = req.body.review;
-        const updatedLocation = await locationsService.addReviewToLocation(locationId, review);
-        res.status(200).json(updatedLocation);
+        console.info('Controller: addReviewToLocation');
+        try {
+            const locationId = req.params.id;
+            const review = req.body.review;
+            const updatedLocation = await locationsService.addReviewToLocation(locationId, review);
+            res.status(200).json(updatedLocation);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: error.message});
+        }
     }
 }
 

@@ -9,13 +9,13 @@ class LocationsRepository {
 
     async getLocations() {
         const locations = await Location.find({});
-        console.info('Locations récupérés avec succès: ' + locations);
+        console.info('Locations récupérés avec succès! ');
         return locations;
     }
 
     async getLocationByBienId(bienId) {
         const location = await Location.find({idBien: bienId});
-        console.info('Location récupéré avec succès: ' + location);
+        console.info('Location récupéré avec succès! ');
         return location;
     }
 
@@ -91,7 +91,7 @@ class LocationsRepository {
     }
 
     async addReviewToLocation(locationId, review) {
-        return Location.updateOne({idLocation: locationId}, {avis: review});
+        return Location.updateOne({idLocation: locationId}, {avis: [review]});
     }
 
 }

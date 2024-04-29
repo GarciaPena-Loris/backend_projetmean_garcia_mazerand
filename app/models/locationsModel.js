@@ -11,7 +11,7 @@ const locationSchema = new mongoose.Schema({
     mailLoueur: { type: mongoose.Schema.Types.String, ref: 'utilisateurs' }, // référence à mail d'utilisateurModel
     dateDebut: 'number', // date sous la forme timestamp
     dateFin: 'number', // date sous la forme timestamp
-    avis: avisSchema
+    avis: {avisSchema}
 });
 
 const Location = mongoose.model('locations', locationSchema);

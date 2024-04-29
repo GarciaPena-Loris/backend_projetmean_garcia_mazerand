@@ -22,105 +22,75 @@ app.use((err, req, res, next) => {
 // Routes pour les utilisateurs
 // GET all users
 app.get('/api/utilisateurs', (req, res) => {
-    utilisateursController.getUtilisateurs();
+    utilisateursController.getUtilisateurs(res, res);
 });
 
 // POST new user
 app.post('/api/utilisateurs', (req, res) => {
-    utilisateursController.createUtilisateur(req.body);
-});
-
-// PUT update user
-app.put('/api/utilisateurs/:id', (req, res) => {
-    utilisateursController.updateUtilisateur(req.params.id, req.body);
+    utilisateursController.createUtilisateur(req, res);
 });
 
 // DELETE user
 app.delete('/api/utilisateurs/:id', (req, res) => {
-    utilisateursController.deleteUtilisateur(req.params.id);
+    utilisateursController.deleteUtilisateur(req, res);
 });
 
 // Register new user
 app.post('/api/register', (req, res) => {
-    utilisateursController.register(req.body);
+    utilisateursController.register(req, res);
 });
 
 // Login user
-app.post('/api/login', (req, res, next) => {
-    utilisateursController.login(req, res, next);
+app.post('/api/login', (req, res) => {
+    utilisateursController.login(req, res);
 });
 
 
 // Routes pour les biens
 app.get('/api/biens', (req, res) => {
-    biensController.getBiens();
+    biensController.getBiens(req, res);
 });
 
 app.get('/api/biens/:id', (req, res) => {
-    biensController.getBienById(req.params.id);
+    biensController.getBienById(req, res);
 });
 
 app.get('/api/lastBienId', (req, res) => {
-    biensController.getLastBienId();
-});
-
-app.post('/api/bien', (req, res) => {
-    biensController.createBien(req.body.bien);
-});
-
-app.put('/api/bien', (req, res) => {
-    biensController.updateBien(req.body.bien);
-});
-
-app.delete('/api/bien/:id', (req, res) => {
-    biensController.deleteBien(req.params.id);
+    biensController.getLastBienId(req, res);
 });
 
 app.post('/api/creerBienAleatoire', (req, res) => {
-    biensController.createBienAleatoire(req.body.mailProprio);
+    biensController.createBienAleatoire(req, res);
 });
 
 app.post('/api/creerMultipleBienAleatoire', (req, res) => {
-    biensController.createMultipleBienAleatoire(req.body.nombreBien);
+    biensController.createMultipleBienAleatoire(req, res);
 });
 
 app.post('/api/creerMultipleBiensFromCityAleatoire', (req, res) => {
-    biensController.createMultipleBiensFromCityAleatoire(req.body.nombreBien, req.body.city);
+    biensController.createMultipleBiensFromCityAleatoire(req, res);
 });
 
 app.post('/api/biens/search', (req, res) => {
-    const {criteria} = req.body;
-    biensController.getBiensByCriteria(criteria);
+    biensController.getBiensByCriteria(req, res);
 });
 
 
 // Routes pour les locations
 app.get('/api/locations', (req, res) => {
-    locationsController.getLocations();
+    locationsController.getLocations(req, res);
 });
 
 app.get('/api/locations/:bienId', (req, res) => {
-    locationsController.getLocationByBienId(req.params.bienId);
-});
-
-app.post('/api/location', (req, res) => {
-    console.info(req.body);
-    locationsController.createLocation(req.body.location);
-});
-
-app.put('/api/location', (req, res) => {
-    locationsController.updateLocation(req.body.location);
-});
-
-app.delete('/api/location/:id', (req, res) => {
-    locationsController.deleteLocation(req.params.id);
+    locationsController.getLocationByBienId(req, res);
 });
 
 app.post('/api/creerFausseReservation', (req, res) => {
-    locationsController.createFakeReservations();
+    locationsController.createFakeReservations(req, res);
 });
+
 app.get('/api/afficherFausseReservation', (req, res) => {
-    locationsController.showFakeReservations();
+    locationsController.showFakeReservations(req, res);
 });
 
 // Add location

@@ -3,55 +3,56 @@ const bcrypt = require('bcrypt');
 
 class UtilisateurController {
 
-    async handleAsync(fn) {
-        return async (req, res, next) => {
-            try {
-                await fn(req, res, next);
-            } catch (error) {
-                console.error('Controller Error:', error.message);
-                res.status(500).json({ error: 'Internal Server Error:' + error.message });
-            }
-        };
-    }
-
     async getUtilisateurs(req, res) {
         console.info('Controller: getUtilisateurs');
-        const utilisateurs = await utilisateurService.getUtilisateurs();
-        res.status(200).json(utilisateurs);
+        try {
+            const utilisateurs = await utilisateurService.getUtilisateurs();
+            res.status(200).json(utilisateurs);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: 'Internal Server Error:' + error.message});
+        }
     }
 
     async createUtilisateur(req, res) {
-        console.info('Controller: createUtilisateur', req.body.utilisateur);
-        const utilisateur = req.body.utilisateur;
-        const createdUtilisateur = await utilisateurService.createUtilisateur(utilisateur);
-        res.status(201).json(createdUtilisateur);
-    }
-
-    async updateUtilisateur(req, res) {
-        console.info('Controller: updateUtilisateur', req.params.utilisateurId, req.body.utilisateur);
-        const utilisateurId = req.params.utilisateurId;
-        const utilisateur = req.body.utilisateur;
-        const updatedUtilisateur = await utilisateurService.updateUtilisateur(utilisateurId, utilisateur);
-        res.status(200).json(updatedUtilisateur);
+        console.info('Controller: createUtilisateur');
+        try {
+            const utilisateur = req.body.utilisateur;
+            const createdUtilisateur = await utilisateurService.createUtilisateur(utilisateur);
+            res.status(201).json(createdUtilisateur);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: 'Internal Server Error:' + error.message});
+        }
     }
 
     async deleteUtilisateur(req, res) {
-        console.info('Controller: deleteUtilisateur', req.params.utilisateurId);
-        const utilisateurId = req.params.utilisateurId;
-        await utilisateurService.deleteUtilisateur(utilisateurId);
-        res.status(204).send();
+        console.info('Controller: deleteUtilisateur');
+        try {
+            const utilisateurId = req.params.id;
+            await utilisateurService.deleteUtilisateur(utilisateurId);
+            res.status(204).send();
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: 'Internal Server Error:' + error.message});
+        }
     }
 
     async register(req, res) {
-        console.info('Controller: register', req.body.utilisateur);
-        const utilisateur = req.body.utilisateur;
-        utilisateur.mdp = await bcrypt.hash(utilisateur.mdp, 10);
-        const createdUtilisateur = await utilisateurService.createUtilisateur(utilisateur);
-        res.status(201).json(createdUtilisateur);
+        console.info('Controller: register');
+        try {
+            const utilisateur = req.body.utilisateur;
+            utilisateur.mdp = await bcrypt.hash(utilisateur.mdp, 10);
+            const createdUtilisateur = await utilisateurService.createUtilisateur(utilisateur);
+            res.status(201).json(createdUtilisateur);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: 'Internal Server Error:' + error.message});
+        }
     }
 
-    async login(req, res, next) {
-        console.info('Controller: login', req.body.mail);
+    async login(req, res) {
+        console.info('Controller: login');
         try {
             const utilisateur = await utilisateurService.getUtilisateurByEmail(req.body.mail);
             if (utilisateur && await bcrypt.compare(req.body.mdp, utilisateur.mdp)) {
@@ -59,7 +60,8 @@ class UtilisateurController {
             }
             throw new Error('Invalid email or password');
         } catch (error) {
-            next(error); // Pass the error to the Express error handler
+            console.error('Controller Error:', error.message);
+            res.status(500).json({error: 'Internal Server Error:' + error.message});
         }
     }
 
